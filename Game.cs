@@ -15,12 +15,14 @@ namespace WindowsFormsApp1
     {
         public int hexNumber;
         public int playerNumber;
+        public int chosenHex;
 
 
         public Game()
         {
             hexNumber = 37;
             playerNumber = 6;
+            chosenHex = 0;
         }
     }
 }
