@@ -16,16 +16,14 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
             InitializeGame();
-            
-
-
+            this.ClientSize = FORMSIZE;
         }
-
+        private System.Drawing.Size FORMSIZE = new System.Drawing.Size(1920, 1000);
         private int clicks = 0;
         Game game;
         Hex[] hexes;
         Player[] players;
-        private string[] playerColors = { "Yellow", "Green", "Red", "Blue", "Purple", "Black" };
+        private string[] playerColors = { "Yellow", "Red", "Green", "Blue", "Purple", "Black" };
         List<string> playerQueue = new List<string>();
 
 
@@ -53,6 +51,7 @@ namespace WindowsFormsApp1
             hexes[28].color = "Blue";
             hexes[31].color = "Purple";
             hexes[34].color = "Black";
+            textBox1.Text = $"Tura gracza {playerQueue[0]}";
         }
 
 
@@ -85,19 +84,29 @@ namespace WindowsFormsApp1
             if (distance < picBoard.Width / 11)
             {
                 clicks++;
-                textBox1.Text = $"Kliknięto {clicks} razy, ostatnio {hexes[id].coords.X},{hexes[id].coords.Y}";
-                if(hexes[id].color == "White")
-                {
-                    hexes[id].color = playerQueue[0];
-                    playerQueue.Add(playerQueue[0]);
-                    playerQueue.RemoveAt(0);
-                }
+                ChoseHex(id);
+
             }
             picBoard.Refresh();
 
         }
 
-
+        private void ChoseHex(int id)
+        {
+            game.chosenHex = id;
+            String[] text = new String[3];
+            text[0] = $"Wybrano hex {hexes[id].coords.X}, {hexes[id].coords.Y}";
+            if(hexes[id].color == "White")
+            {
+                text[1] = "Hex nie należy do nikogo";
+            }
+            else
+            {
+                text[1] = $"Hex należy do gracza {hexes[id].color}";
+            }
+            textBox2.Lines = text;
+            button1.Visible = CanBeActivated(id);
+        }
         private void DrawBoard(Graphics g)
         {
             foreach(Hex hex in hexes)
@@ -115,6 +124,29 @@ namespace WindowsFormsApp1
 
         }
 
-        
+        private bool CanBeActivated(int id)
+        {
+            float maximum_distance = (float)Math.Pow(picBoard.Width / 11.0d, 2) * 3;
+            foreach(Hex hex in hexes)
+            {
+                float distance = 0;
+                distance = (float)Math.Pow(hex.center.X - hexes[id].center.X, 2) + (float)Math.Pow(hex.center.Y - hexes[id].center.Y, 2);
+                if(distance <= maximum_distance)
+                {
+                    if (hex.color == playerQueue[0]) return true;
+                }
+            }
+            return false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            hexes[game.chosenHex].color = playerQueue[0];
+            playerQueue.Add(playerQueue[0]);
+            playerQueue.RemoveAt(0);
+            textBox1.Text = $"Tura gracza {playerQueue[0]}";
+            button1.Visible = false;
+            picBoard.Refresh();
+        }
     }
 }

@@ -30,6 +30,8 @@
         {
             this.picBoard = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picBoard)).BeginInit();
             this.SuspendLayout();
             // 
@@ -38,8 +40,9 @@
             this.picBoard.BackColor = System.Drawing.SystemColors.Control;
             this.picBoard.Location = new System.Drawing.Point(67, 51);
             this.picBoard.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.picBoard.MinimumSize = new System.Drawing.Size(708, 906);
             this.picBoard.Name = "picBoard";
-            this.picBoard.Size = new System.Drawing.Size(1089, 1388);
+            this.picBoard.Size = new System.Drawing.Size(708, 906);
             this.picBoard.TabIndex = 0;
             this.picBoard.TabStop = false;
             this.picBoard.Paint += new System.Windows.Forms.PaintEventHandler(this.picBoard_Paint);
@@ -47,18 +50,43 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(245, 14);
+            this.textBox1.Location = new System.Drawing.Point(67, 14);
             this.textBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(739, 27);
+            this.textBox1.Size = new System.Drawing.Size(708, 27);
             this.textBox1.TabIndex = 1;
+            // 
+            // textBox2
+            // 
+            this.textBox2.BackColor = System.Drawing.Color.White;
+            this.textBox2.Font = new System.Drawing.Font("MV Boli", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox2.Location = new System.Drawing.Point(942, 60);
+            this.textBox2.Multiline = true;
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ReadOnly = true;
+            this.textBox2.Size = new System.Drawing.Size(479, 229);
+            this.textBox2.TabIndex = 2;
+            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(1123, 329);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(92, 35);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Aktywuj";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2539, 1421);
+            this.ClientSize = new System.Drawing.Size(1904, 961);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.picBoard);
             this.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -75,6 +103,8 @@
 
         private System.Windows.Forms.PictureBox picBoard;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Button button1;
     }
 }
 
