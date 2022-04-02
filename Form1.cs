@@ -19,23 +19,23 @@ namespace WindowsFormsApp1
             this.ClientSize = FORMSIZE;
         }
         private System.Drawing.Size FORMSIZE = new System.Drawing.Size(1920, 1000);
-        private int clicks = 0;
         Game game;
         Hex[] hexes;
         Player[] players;
+        List<Unit> units = new List<Unit>();
         private string[] playerColors = { "Yellow", "Red", "Green", "Blue", "Purple", "Black" };
-        List<string> playerQueue = new List<string>();
+        List<int> playerQueue = new List<int>();
 
 
         private void InitializeGame()
         {
             game = new Game();
-
+            
             players = new Player[game.playerNumber];
             for (int i = 0; i < 6; i++)
             {
-                players[i] = new Player(i, playerColors[i]);
-                playerQueue.Add(players[i].color);
+                players[i] = new Player(i, playerColors[i], (19 + i * 3));
+                playerQueue.Add(i);
             }
 
             hexes = new Hex[game.hexNumber];
@@ -51,7 +51,8 @@ namespace WindowsFormsApp1
             hexes[28].color = "Blue";
             hexes[31].color = "Purple";
             hexes[34].color = "Black";
-            textBox1.Text = $"Tura gracza {playerQueue[0]}";
+            textBox1.Text = $"Tura gracza {players[playerQueue[0]].color}";
+            CreateStartingUnits();
         }
 
 
@@ -83,9 +84,7 @@ namespace WindowsFormsApp1
             }
             if (distance < picBoard.Width / 11)
             {
-                clicks++;
                 ChoseHex(id);
-
             }
             picBoard.Refresh();
 
@@ -104,9 +103,18 @@ namespace WindowsFormsApp1
             {
                 text[1] = $"Hex należy do gracza {hexes[id].color}";
             }
+            if(hexes[id].unitsId.Count() == 0)
+            {
+                text[2] = "Brak jednostek";
+            }
+            else
+            {
+                text[2] = $"Znajduje się tutaj {hexes[id].unitsId.Count()} mysliwcow";
+            }
             textBox2.Lines = text;
             button1.Visible = CanBeActivated(id);
         }
+
         private void DrawBoard(Graphics g)
         {
             foreach(Hex hex in hexes)
@@ -124,7 +132,54 @@ namespace WindowsFormsApp1
 
         }
 
-        private bool CanBeActivated(int id)
+        private bool CanBeActivated(int id)   //units in range
+        {
+
+            foreach(int unit in players[playerQueue[0]].unitsId){
+                double distance = Math.Pow(hexes[units[unit].hexId].center.X - hexes[id].center.X,2) + Math.Pow(hexes[units[unit].hexId].center.Y - hexes[id].center.Y, 2);
+                double avalaible_distance = Math.Pow((units[unit].move * picBoard.Width / 11.0d * Math.Sqrt(3)), 2);
+                if (distance <= avalaible_distance) return true;
+            }
+            return false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            checkedListBox1.Items.Clear();
+            checkedListBox1.Visible = true;
+            checkedListBox1.Items.Add("Nowy mysliwiec", false);
+            checkedListBox1.Items.Add("Kolejny mysliwiec", false);
+            hexes[game.chosenHex].color = players[playerQueue[0]].color;
+            playerQueue.Add(playerQueue[0]);
+            playerQueue.RemoveAt(0);
+            textBox1.Text = $"Tura gracza {players[playerQueue[0]].color}";
+            button1.Visible = false;
+            picBoard.Refresh();
+        }
+
+        private void CreateStartingUnits()
+        {
+            for(int i = 0; i<game.playerNumber; i++)
+            {
+                CreateUnit(i, 2, 1, 8, players[i].startHex);
+                CreateUnit(i, 2, 1, 8, players[i].startHex);
+                CreateUnit(i, 2, 1, 8, players[i].startHex);
+                CreateUnit(i, 2, 1, 8, players[i].startHex);
+                CreateUnit(i, 2, 1, 8, players[i].startHex);
+            }
+        }
+
+        private void CreateUnit(int playerId, int move, int shots, int power, int hex)
+        {
+            units.Add(new Unit(game.unit_id, players[playerId].color, move, shots, power, hex, "Hunter"));
+            players[playerId].unitsId.Add(game.unit_id);
+            hexes[hex].unitsId.Add(game.unit_id);
+            game.unit_id++;
+        }
+    }
+
+
+    /*        private bool CanBeActivated(int id)   //just nieghbour hexes
         {
             float maximum_distance = (float)Math.Pow(picBoard.Width / 11.0d, 2) * 3;
             foreach(Hex hex in hexes)
@@ -137,16 +192,5 @@ namespace WindowsFormsApp1
                 }
             }
             return false;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            hexes[game.chosenHex].color = playerQueue[0];
-            playerQueue.Add(playerQueue[0]);
-            playerQueue.RemoveAt(0);
-            textBox1.Text = $"Tura gracza {playerQueue[0]}";
-            button1.Visible = false;
-            picBoard.Refresh();
-        }
-    }
+        }*/
 }

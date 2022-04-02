@@ -15,6 +15,7 @@ namespace WindowsFormsApp1
         public PointF center;
         public Point[] points = new Point[6];
         public Point[] points2 = new Point[6];
+        public List<int> unitsId = new List<int>();
         public Hex(int i,  int ring, int number, int width, int height)
         {
             id = i;

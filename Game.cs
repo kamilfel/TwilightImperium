@@ -16,6 +16,7 @@ namespace WindowsFormsApp1
         public int hexNumber;
         public int playerNumber;
         public int chosenHex;
+        public int unit_id = 0;
 
 
         public Game()
